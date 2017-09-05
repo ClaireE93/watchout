@@ -33,10 +33,13 @@ const enemiesSVG = svg.selectAll('circle').data(data).enter()
                       .attr("cy", function(d) { return d.y; })
                       .attr("r", 10);
 
+const scoreTimer = d3.timer(function(elapsed) {
+  const cur = document.getElementById('currentScoreCount').textContent
+  document.getElementById('currentScoreCount').textContent = '' + (+cur + 1);
+}, 1000);
+
 const moveEnemies = () => {
     enemiesSVG.transition().duration(1000).attr('cx', function(d) {
-      const newX = Math.floor(Math.random() * boardWidth);
-
       return Math.floor(Math.random() * boardWidth);
     })
     .attr('cy', function(d) {
@@ -48,7 +51,6 @@ const moveEnemies = () => {
 };
 
 const collision = function() {
-  // debugger;
   const cur = document.getElementById('currentScoreCount');
   const high = document.getElementById('highScoreCount');
   const collisionCount = document.getElementById('collisionCount');
@@ -72,14 +74,7 @@ const collisionDetection = function() {
   };
 };
 
-// Get enemies moving
-moveEnemies();
-
-
-
-
 // Create draggable player
-
 const player = d3.select('svg')
                  .append("circle").classed('player', true)
                  .attr('cx', playerObj.x).attr('cy', playerObj.y)
@@ -96,6 +91,16 @@ const drag = d3.behavior.drag()
 
 d3.select(".player").call(drag);
 
+// const scoreCounter = function() {
+//   while(true) {
+//     const counter = document.getElementById('currentScoreCount');
+//     const curScore = +counter.textContent;
+//     counter.textContent = '' + (curScore + 1);
+//   }
+// }
+
+
 
 // Get enemies moving
 moveEnemies();
+// scoreCounter();
