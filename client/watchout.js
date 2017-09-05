@@ -28,10 +28,12 @@ const svg = d3.select(".board").append("svg")
 //                  .style('fill', 'blue');
 
 const enemiesSVG = svg.selectAll('circle').data(data).enter()
-                      .append('circle')
-                      .attr("cx", function(d) { return d.x; })
-                      .attr("cy", function(d) { return d.y; })
-                      .attr("r", 10);
+                      .append('image')
+                      .attr('xlink:href', 'tie-fighter.png')
+                      .attr("x", function(d) { return d.x; })
+                      .attr("y", function(d) { return d.y; })
+                      .attr("width", 40).attr("height", 40)
+                      .classed('fighter', true);
 
 const scoreTimer = d3.timer(function(elapsed) {
   const cur = document.getElementById('currentScoreCount').textContent
@@ -39,10 +41,10 @@ const scoreTimer = d3.timer(function(elapsed) {
 }, 1000);
 
 const moveEnemies = () => {
-    enemiesSVG.transition().duration(1500).attr('cx', function(d) {
+    enemiesSVG.transition().duration(1500).attr('x', function(d) {
       return Math.floor(Math.random() * boardWidth);
     })
-    .attr('cy', function(d) {
+    .attr('y', function(d) {
       return Math.floor(Math.random() * boardHeight);
     })
     .tween('collision', collisionDetection)
@@ -64,11 +66,11 @@ const collisionDetection = function() {
   return function() {
     const thisCircle = d3.select(this);
     const player = d3.select('.player');
-    const dx = thisCircle.attr('cx') - player.attr('x');
-    const dy = thisCircle.attr('cy') - player.attr('y');
+    const dx = thisCircle.attr('x') - player.attr('x');
+    const dy = thisCircle.attr('y') - player.attr('y');
     const distance = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
 
-    if (distance < +thisCircle.attr('r') + +player.attr('width')/2) {
+    if (distance < thisCircle.attr('width')/2 + player.attr('width')/2) {
       collision();
     }
   };
@@ -81,10 +83,10 @@ const collisionDetection = function() {
 //                  .attr('r', 10).style('fill', 'blue');
 const player = d3.select('svg')
                  .append("image").classed('player', true)
-                 .attr('xlink:href', 'asteroid.png')
+                 .attr('xlink:href', 'millenium-falcon.png')
                  .attr('x', playerObj.x).attr('y', playerObj.y)
                 //  .attr('r', 10).style('fill', 'blue');
-                .attr('width', 20).attr('height', 20);
+                .attr('width', 40).attr('height', 40);
 
 const dragMove = function(d) {
    d3.select(this)
