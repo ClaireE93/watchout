@@ -1,10 +1,4 @@
 
-// d3.select("body").append("svg").attr("width", 20)
-//   .attr("height", 20).append("circle")
-//   .attr("cx", 10).attr("cy", 10).attr("r", 10)
-//   .style("fill", "purple");
-
-
 const boardWidth = 400;
 const boardHeight = 400;
 const enemyCount = 20;
@@ -19,6 +13,7 @@ const generatePosition = function() {
   }
 };
 
+// Create enemy object
 generatePosition();
 
 
@@ -43,4 +38,5 @@ const moveEnemies = () => {
   }, 1000);
 };
 
+// Get enemies moving
 moveEnemies();
