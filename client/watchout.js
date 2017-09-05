@@ -39,7 +39,7 @@ const scoreTimer = d3.timer(function(elapsed) {
 }, 1000);
 
 const moveEnemies = () => {
-    enemiesSVG.transition().duration(1000).attr('cx', function(d) {
+    enemiesSVG.transition().duration(1500).attr('cx', function(d) {
       return Math.floor(Math.random() * boardWidth);
     })
     .attr('cy', function(d) {
@@ -64,42 +64,38 @@ const collisionDetection = function() {
   return function() {
     const thisCircle = d3.select(this);
     const player = d3.select('.player');
-    const dx = thisCircle.attr('cx') - player.attr('cx');
-    const dy = thisCircle.attr('cy') - player.attr('cy');
+    const dx = thisCircle.attr('cx') - player.attr('x');
+    const dy = thisCircle.attr('cy') - player.attr('y');
     const distance = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
 
-    if (distance < +thisCircle.attr('r') + +player.attr('r')) {
+    if (distance < +thisCircle.attr('r') + +player.attr('width')/2) {
       collision();
     }
   };
 };
 
 // Create draggable player
+// const player = d3.select('svg')
+//                  .append("circle").classed('player', true)
+//                  .attr('cx', playerObj.x).attr('cy', playerObj.y)
+//                  .attr('r', 10).style('fill', 'blue');
 const player = d3.select('svg')
-                 .append("circle").classed('player', true)
-                 .attr('cx', playerObj.x).attr('cy', playerObj.y)
-                 .attr('r', 10).style('fill', 'blue');
+                 .append("image").classed('player', true)
+                 .attr('xlink:href', 'asteroid.png')
+                 .attr('x', playerObj.x).attr('y', playerObj.y)
+                //  .attr('r', 10).style('fill', 'blue');
+                .attr('width', 20).attr('height', 20);
 
 const dragMove = function(d) {
    d3.select(this)
-     .attr("cy", d3.event.y)
-     .attr("cx", d3.event.x)
+     .attr("y", d3.event.y)
+     .attr("x", d3.event.x)
 };
 
 const drag = d3.behavior.drag()
                .on("drag", dragMove);
 
 d3.select(".player").call(drag);
-
-// const scoreCounter = function() {
-//   while(true) {
-//     const counter = document.getElementById('currentScoreCount');
-//     const curScore = +counter.textContent;
-//     counter.textContent = '' + (curScore + 1);
-//   }
-// }
-
-
 
 // Get enemies moving
 moveEnemies();
