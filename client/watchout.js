@@ -4,14 +4,19 @@
 //   .attr("cx", 10).attr("cy", 10).attr("r", 10)
 //   .style("fill", "purple");
 
-data = [
-{x: 10, y: 10},
-{x: 20, y: 20},
-{x: 30, y: 30},
-];
+const data = [];
 
 const boardWidth = 400;
 const boardHeight = 400;
+const enemies = 20;
+for (let i = 0; i < enemies; i++) {
+  const obj = {};
+  obj.x = Math.floor(Math.random() * boardWidth);
+  obj.y = Math.floor(Math.random() * boardHeight);
+  data[i] = obj;
+}
+
+
 svg = d3.select(".board").append("svg")
       .attr("width", '' + boardWidth).attr("height",'' + boardHeight);
 svg.selectAll('circle').data(data).enter()
