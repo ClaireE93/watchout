@@ -34,20 +34,49 @@ const enemiesSVG = svg.selectAll('circle').data(data).enter()
                       .attr("r", 10);
 
 const moveEnemies = () => {
-  setTimeout(() => {
-    enemiesSVG.transition().duration(700).attr('cx', function(d) {
+    enemiesSVG.transition().duration(1000).attr('cx', function(d) {
+      const newX = Math.floor(Math.random() * boardWidth);
+
       return Math.floor(Math.random() * boardWidth);
     })
     .attr('cy', function(d) {
       return Math.floor(Math.random() * boardHeight);
-    });
+    })
+    .tween('collision', collisionDetection)
+    .each('end', moveEnemies);
 
-    moveEnemies();
-  }, 1000);
+};
+
+const collision = function() {
+  // debugger;
+  const cur = document.getElementById('currentScoreCount');
+  const high = document.getElementById('highScoreCount');
+  const collisionCount = document.getElementById('collisionCount');
+  const newHigh = Math.max(+cur.textContent, +high.textContent);
+  high.textContent = '' + newHigh;
+  cur.textContent = '0';
+  collisionCount.textContent = +collisionCount.textContent + 1;
+};
+
+const collisionDetection = function() {
+  return function() {
+    const thisCircle = d3.select(this);
+    const player = d3.select('.player');
+    const dx = thisCircle.attr('cx') - player.attr('cx');
+    const dy = thisCircle.attr('cy') - player.attr('cy');
+    const distance = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
+
+    if (distance < +thisCircle.attr('r') + +player.attr('r')) {
+      collision();
+    }
+  };
 };
 
 // Get enemies moving
 moveEnemies();
+
+
+
 
 // Create draggable player
 
@@ -66,3 +95,7 @@ const drag = d3.behavior.drag()
                .on("drag", dragMove);
 
 d3.select(".player").call(drag);
+
+
+// Get enemies moving
+moveEnemies();
