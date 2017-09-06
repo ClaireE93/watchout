@@ -5,26 +5,26 @@ const canvasHeight = 500;
 const canvasWidth = 500;
 
 const createData = function (x, y) {
+  const endR = calculateEndRadius(x, y);
+  const thetaIncrement = (2 * Math.PI) / numParticles;
+  let curTheta = 0;
+
   for (let i = 0; i < numParticles; i++) {
     const obj = {};
     obj.x = x;
     obj.y = y;
-    // const sign = Math.random() < 0.5 ? -1 : 1;
-    // const slope = sign * Math.random()/Math.random();
-    // obj.m = slope; //NOTE: Slope y = mx + b
-    // obj.b = y - (x * slope);
-    if (Math.random() < 0.5) {
-      obj.endX = Math.random() * canvasHeight;
-      const sign = Math.random() < 0.5 ? -1 : 1;
-      obj.endY = sign < 0 ? canvasHeight : 0;
-    } else {
-      obj.endY = Math.random() * canvasHeight;
-      const sign = Math.random() < 0.5 ? -1 : 1;
-      obj.endX = sign < 0 ? canvasWidth : 0;
-    }
+    obj.endX = x + (endR * Math.cos(curTheta));
+    obj.endY = y + (endR * Math.sin(curTheta));
+    curTheta += thetaIncrement;
     data[i] = obj;
   }
 }
+
+const calculateEndRadius = (x, y) => {
+  const xDiff = canvasWidth - x;
+  const yDiff = canvasHeight - y;
+  return Math.min(x, y, xDiff, yDiff);
+};
 
 const createExplosion = function(e) {
   const m = d3.mouse(this);
@@ -51,26 +51,26 @@ const createExplosion = function(e) {
                         .remove();
 };
 
-function particle() {
-  var m = d3.mouse(this);
-
-  svg.insert("circle", ".canvas")
-      .attr("cx", m[0])
-      .attr("cy", m[1])
-      .attr("r", 1e-6)
-      .style("stroke", d3.hsl((i = (i + 1) % 360), 1, .5))
-      .style("stroke-opacity", 1)
-    .transition()
-      .duration(2000)
-      .ease(function(x) {
-        return x ** 2;
-      })
-      .attr("r", 100)
-      .style("stroke-opacity", 1e-6)
-      .remove();
-
-  d3.event.preventDefault();
-}
+// function particle() {
+//   var m = d3.mouse(this);
+//
+//   svg.insert("circle", ".canvas")
+//       .attr("cx", m[0])
+//       .attr("cy", m[1])
+//       .attr("r", 1e-6)
+//       .style("stroke", d3.hsl((i = (i + 1) % 360), 1, .5))
+//       .style("stroke-opacity", 1)
+//     .transition()
+//       .duration(2000)
+//       .ease(function(x) {
+//         return x ** 2;
+//       })
+//       .attr("r", 100)
+//       .style("stroke-opacity", 1e-6)
+//       .remove();
+//
+//   d3.event.preventDefault();
+// }
 
 
 const canvas = d3.select('.canvas');
