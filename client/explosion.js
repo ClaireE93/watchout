@@ -1,8 +1,3 @@
-// Simulate explosion particle system
-// const data = [];
-// const numParticles = 100;
-// const canvasHeight = 500;
-// const canvasWidth = 500;
 
 class Explosion {
   constructor(particles) {
@@ -59,6 +54,7 @@ class Explosion {
                           })
                           .style("fill-opacity", 0)
                           .remove();
+    d3.event.preventDefault();
   }
 }
 
